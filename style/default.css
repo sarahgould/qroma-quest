@@ -1,0 +1,25 @@
+body {
+    background: #444;
+    margin: 0;
+    padding: 20px;
+}
+
+#main {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+a, a:visited, a:active {
+
+}
