@@ -1,7 +1,10 @@
 body {
-    background: #444;
+    background: #ccc;
     margin: 0;
     padding: 20px;
+    font-family: monospace;
+    font-size: 16px;
+    color: #444;
 }
 
 #main {
@@ -10,10 +13,14 @@ body {
     margin: 0 auto;
 }
 
+#instructions {
+    margin-top: 20px;
+}
+
 canvas {
     width: 100%;
     height: 100%;
-    border-radius: 4px;
+    box-shadow: 8px 8px 0 rgba(0,0,0, 0.05);
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-crisp-edges;
     image-rendering: pixelated;
@@ -21,5 +28,14 @@ canvas {
 }
 
 a, a:visited, a:active {
+    display: inline-block;
+    margin-top: 28px;
+    color: black;
+    text-decoration: underline;
+    font-weight: bold;
+}
 
+a:hover {
+    background: #eee;
+    box-shadow: 0 0 0 2px #eee;
 }

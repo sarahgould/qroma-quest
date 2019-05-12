@@ -369,7 +369,7 @@ let updateAvatar = (dt) => {
     if (lastKey === 'ArrowLeft' || lastKey === 'a') {
         posX -= 1
     }
-    else if (lastKey === 'ArrowRight' || lastKey === 's') {
+    else if (lastKey === 'ArrowRight' || lastKey === 'd') {
         posX += 1
     }
     else if (lastKey === 'ArrowUp' || lastKey === 'w') {
@@ -454,10 +454,10 @@ let updateAvatar = (dt) => {
         let x = posX
         let y = posY
 
-        if (lastKey === 'ArrowLeft') x--
-        else if (lastKey === 'ArrowRight') x++
-        else if (lastKey === 'ArrowUp') y--
-        else if (lastKey === 'ArrowDown') y++
+        if (lastKey === 'ArrowLeft' || lastKey === 'a') x--
+        else if (lastKey === 'ArrowRight' || lastKey === 'd') x++
+        else if (lastKey === 'ArrowUp' || lastKey === 'w') y--
+        else if (lastKey === 'ArrowDown' || lastKey === 's') y++
 
         let newIndex = mapWidth * y + x
         let tileTypeIndexAtLocation = maps[currentMapIndex][newIndex]
@@ -723,8 +723,19 @@ window.onload = () => {
 
     // create link to this map
     gameLink = document.createElement('a')
-    gameLink.innerText = 'game link'
+    gameLink.innerText = 'share this world'
+    gameLink.target = '_blank'
     main.appendChild(gameLink)
+
+    // create instructions
+    let instructions = document.createElement('div')
+    instructions.id = 'instructions'
+    instructions.innerHTML = `
+    <strong>arrows:</strong> move<br>
+    <strong>shift + arrows:</strong> pick tile<br>
+    <strong>space + arrows:</strong> place tile<br>
+    <strong>goal:</strong> return to start with all slimes<br>`
+    main.appendChild(instructions)
     
     // get map from url
     let url = window.location.href
@@ -747,13 +758,13 @@ window.onload = () => {
             isSelectingTile = true
         }
         else if (isSelectingTile) {
-            if (e.key === 'ArrowLeft') {
+            if (e.key === 'ArrowLeft' || e.key === 'a') {
                 selectedTile -= 1
                 if (selectedTile < 0) {
                     selectedTile = tileTypes.length - 1
                 }
             }
-            else if (e.key === 'ArrowRight') {
+            else if (e.key === 'ArrowRight' || e.key === 's') {
                 selectedTile += 1
                 if (selectedTile >= tileTypes.length) {
                     selectedTile = 0
@@ -767,10 +778,10 @@ window.onload = () => {
             let x = avatarPosX
             let y = avatarPosY
 
-            if (e.key === 'ArrowLeft') x--
-            else if (e.key === 'ArrowRight') x++
-            else if (e.key === 'ArrowUp') y--
-            else if (e.key === 'ArrowDown') y++
+            if (e.key === 'ArrowLeft' || e.key === 'a') x--
+            else if (e.key === 'ArrowRight' || e.key === 'd') x++
+            else if (e.key === 'ArrowUp' || e.key === 'w') y--
+            else if (e.key === 'ArrowDown' || e.key === 's') y++
             else return
 
             if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) {
