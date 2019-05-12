@@ -187,6 +187,16 @@ let tiles = {
     '  *  *  ' +
     '        ' +
     '        '
+    ,
+    'heart':
+    '        ' +
+    '  ** ** ' +
+    ' *******' +
+    ' *******' +
+    '  ***** ' +
+    '   ***  ' +
+    '    *   ' +
+    '        '
 }
 
 // MAP
@@ -206,6 +216,7 @@ let keyIsDown = false
 let isSelectingTile = false
 let isPlacingTile = false
 let selectedTile = 0
+let showWinScreen = false
 
 // ANIMATIONS
 let lastFrameTime = 0
@@ -417,7 +428,9 @@ let updateAvatar = (dt) => {
     }
     else if (tileType === 'start') {
         if (numGems >= countGems()) {
-            console.log('you won!')
+            showWinScreen = true
+            transitionType = 'win'
+            transitionTimer = transitionMax
         }
     }
     else if (tileType === 'gem') {
@@ -553,6 +566,20 @@ let sendAvatarToStart = () => {
     transitionTimer = transitionMax
 }
 
+let updateWinScreen = () => {
+    // draw background
+    context.fillStyle = '#222'
+    context.fillRect(0, 0, mapWidth * tileWidth, mapHeight * tileHeight)
+
+    // draw win message
+    context.fillStyle = '#eee'
+    let centerX = (mapWidth * tileWidth / 2) - (tileWidth / 2)
+    let centerY = (mapHeight * tileHeight / 2) - (tileHeight / 2)
+    drawTile(tiles['heart'], centerX - tileWidth - 2, centerY)
+    drawTile(tiles['gem' + currentFrame], centerX, centerY)
+    drawTile(tiles['heart'], centerX + tileWidth + 2, centerY)
+}
+
 let updateTransition = (dt) => {
     transitionTimer -= dt
     let progress = 1 - transitionTimer / transitionMax
@@ -574,7 +601,12 @@ let updateTransition = (dt) => {
         
         context.fillStyle = '#eee'
         drawTile(tiles['avatar0'], avatarPosX * tileWidth, avatarPosY * tileHeight)
-
+    
+        context.globalAlpha = 1
+    }
+    else if (transitionType === 'win') {
+        context.globalAlpha = progress
+        updateWinScreen()
         context.globalAlpha = 1
     }
     else if (transitionType === 'up' || transitionType === 'down') {
@@ -670,7 +702,7 @@ let update = (timestamp) => {
     drawMap(currentMapIndex)
 
     // update and draw avatar
-    if (transitionTimer <= 0) updateAvatar(dt)
+    if (transitionTimer <= 0 && !showWinScreen) updateAvatar(dt)
     if (!isPlacingTile) {
         context.fillStyle = '#444'
         context.globalAlpha = 0.1
@@ -697,6 +729,11 @@ let update = (timestamp) => {
         if (tiles[tileType + '0']) tileType += '0'
         let tile = tiles[tileType]
         drawTile(tile, avatarPosX * tileWidth, avatarPosY * tileHeight)
+    }
+
+    // show win screen
+    if (showWinScreen && transitionTimer <= 0) {
+        updateWinScreen()
     }
 
     // next frame
@@ -754,6 +791,12 @@ window.onload = () => {
 
     // setup event handlers
     document.addEventListener('keydown', e => {
+        if (showWinScreen && transitionTimer <= 0) {
+            showWinScreen = false
+            sendAvatarToStart()
+            return
+        }
+
         if (e.key === 'z' || e.key === 'Shift') {
             isSelectingTile = true
         }
