@@ -743,7 +743,7 @@ let update = (timestamp) => {
 let gameLink
 
 let updateGameLink = () => {
-    let baseUrl = window.location.href.split('?')[0]
+    let baseUrl = 'https://sarahgould.github.io/qroma-quest/' // window.location.href.split('?')[0]
     let data = maps.map(m => encodeMap(m)).join('-')
     gameLink.href = baseUrl + '?g=' + data
 }
@@ -796,6 +796,8 @@ window.onload = () => {
             sendAvatarToStart()
             return
         }
+
+        if (e.key.includes('Arrow')) e.preventDefault()
 
         if (e.key === 'z' || e.key === 'Shift') {
             isSelectingTile = true
